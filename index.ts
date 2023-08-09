@@ -333,7 +333,7 @@ function convertTile(tile: RawTile) {
     case RawTile.LOCK1: return new Lock1();
     case RawTile.KEY2: return new Key2();
     case RawTile.LOCK2: return new Lock2();
-    default: return new Player();
+    default: throw new Error('This is wrong tile: ' + tile);
   }
 }
 
