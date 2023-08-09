@@ -34,10 +34,14 @@ let inputs: Input[] = [];
 function remove(tile: Tile) {
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[y].length; x++) {
-      if (map[y][x] === tile) {
-        map[y][x] = Tile.AIR;
-      }
+      removeTile(y, x, tile);
     }
+  }
+}
+
+function removeTile(y: number, x: number, tile: Tile) {
+  if (map[y][x] === tile) {
+    map[y][x] = Tile.AIR;
   }
 }
 
@@ -83,46 +87,55 @@ function moveVertical(dy: number) {
 function update() {
   moveInputs();
 
-  updateTile();
+  updateTiles();
 }
 
-function updateTile() {
+function updateTiles() {
   for (let y = map.length - 1; y >= 0; y--) {
     for (let x = 0; x < map[y].length; x++) {
-      if ((map[y][x] === Tile.STONE || map[y][x] === Tile.FALLING_STONE)
-        && map[y + 1][x] === Tile.AIR) {
-        map[y + 1][x] = Tile.FALLING_STONE;
-        map[y][x] = Tile.AIR;
-      } else if ((map[y][x] === Tile.BOX || map[y][x] === Tile.FALLING_BOX)
-        && map[y + 1][x] === Tile.AIR) {
-        map[y + 1][x] = Tile.FALLING_BOX;
-        map[y][x] = Tile.AIR;
-      } else if (map[y][x] === Tile.FALLING_STONE) {
-        map[y][x] = Tile.STONE;
-      } else if (map[y][x] === Tile.FALLING_BOX) {
-        map[y][x] = Tile.BOX;
-      }
+      updateTile(y, x);
     }
+  }
+}
+
+function updateTile(y: number, x: number) {
+  if ((map[y][x] === Tile.STONE || map[y][x] === Tile.FALLING_STONE)
+    && map[y + 1][x] === Tile.AIR) {
+    map[y + 1][x] = Tile.FALLING_STONE;
+    map[y][x] = Tile.AIR;
+  } else if ((map[y][x] === Tile.BOX || map[y][x] === Tile.FALLING_BOX)
+    && map[y + 1][x] === Tile.AIR) {
+    map[y + 1][x] = Tile.FALLING_BOX;
+    map[y][x] = Tile.AIR;
+  } else if (map[y][x] === Tile.FALLING_STONE) {
+    map[y][x] = Tile.STONE;
+  } else if (map[y][x] === Tile.FALLING_BOX) {
+    map[y][x] = Tile.BOX;
   }
 }
 
 function moveInputs() {
   while (inputs.length > 0) {
     let current = inputs.pop();
-    if (current === Input.LEFT)
-      moveHorizontal(-1);
-    else if (current === Input.RIGHT)
-      moveHorizontal(1);
-    else if (current === Input.UP)
-      moveVertical(-1);
-    else if (current === Input.DOWN)
-      moveVertical(1);
+    
+    moveInput(current);
   }
+}
+
+function moveInput(current: Input) {
+  if (current === Input.LEFT)
+    moveHorizontal(-1);
+  else if (current === Input.RIGHT)
+    moveHorizontal(1);
+  else if (current === Input.UP)
+    moveVertical(-1);
+  else if (current === Input.DOWN)
+    moveVertical(1);
 }
 
 function draw() {
   let g = prepareCanvas();
-  
+
   drawMap(g);
   drawPlayer(g);
 }
@@ -144,23 +157,31 @@ function drawPlayer(g: CanvasRenderingContext2D) {
 function drawMap(g: CanvasRenderingContext2D) {
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[y].length; x++) {
-      if (map[y][x] === Tile.FLUX)
-        g.fillStyle = "#ccffcc";
-      else if (map[y][x] === Tile.UNBREAKABLE)
-        g.fillStyle = "#999999";
-      else if (map[y][x] === Tile.STONE || map[y][x] === Tile.FALLING_STONE)
-        g.fillStyle = "#0000cc";
-      else if (map[y][x] === Tile.BOX || map[y][x] === Tile.FALLING_BOX)
-        g.fillStyle = "#8b4513";
-      else if (map[y][x] === Tile.KEY1 || map[y][x] === Tile.LOCK1)
-        g.fillStyle = "#ffcc00";
-      else if (map[y][x] === Tile.KEY2 || map[y][x] === Tile.LOCK2)
-        g.fillStyle = "#00ccff";
+      colorTiles(y, x, g);
 
-      if (map[y][x] !== Tile.AIR && map[y][x] !== Tile.PLAYER)
-        g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      drawCanvas(y, x, g);
     }
   }
+}
+
+function drawCanvas(y: number, x: number, g: CanvasRenderingContext2D) {
+  if (map[y][x] !== Tile.AIR && map[y][x] !== Tile.PLAYER)
+    g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+}
+
+function colorTiles(y: number, x: number, g: CanvasRenderingContext2D) {
+  if (map[y][x] === Tile.FLUX)
+    g.fillStyle = "#ccffcc";
+  else if (map[y][x] === Tile.UNBREAKABLE)
+    g.fillStyle = "#999999";
+  else if (map[y][x] === Tile.STONE || map[y][x] === Tile.FALLING_STONE)
+    g.fillStyle = "#0000cc";
+  else if (map[y][x] === Tile.BOX || map[y][x] === Tile.FALLING_BOX)
+    g.fillStyle = "#8b4513";
+  else if (map[y][x] === Tile.KEY1 || map[y][x] === Tile.LOCK1)
+    g.fillStyle = "#ffcc00";
+  else if (map[y][x] === Tile.KEY2 || map[y][x] === Tile.LOCK2)
+    g.fillStyle = "#00ccff";
 }
 
 function gameLoop() {
