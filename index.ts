@@ -282,6 +282,7 @@ class Key1 implements Tile {
     removeLock();
     moveToTile(playerx + dx, playery);
   }
+  updateTile(y: number, x: number): void { }
 }
 
 class Key2 implements Tile {
@@ -311,6 +312,7 @@ class Key2 implements Tile {
     removeLock();
     moveToTile(playerx + dx, playery);
   }
+  updateTile(y: number, x: number): void { }
 }
 
 class Lock1 implements Tile {
@@ -332,6 +334,7 @@ class Lock1 implements Tile {
   }
   moveVertical(dy: number): void { }
   moveHorizontal(dx: number): void { }
+  updateTile(y: number, x: number): void { }
 }
 
 class Lock2 implements Tile {
@@ -353,6 +356,7 @@ class Lock2 implements Tile {
   }
   moveVertical(dy: number): void { }
   moveHorizontal(dx: number): void { }
+  updateTile(y: number, x: number): void { }
 }
 
 interface Input {
@@ -526,24 +530,8 @@ function update() {
 function updateTiles() {
   for (let y = map.length - 1; y >= 0; y--) {
     for (let x = 0; x < map[y].length; x++) {
-      updateTile(y, x);
+      map[y][x].updateTile(y, x);
     }
-  }
-}
-
-function updateTile(y: number, x: number) {
-  if ((map[y][x].isStone() || map[y][x].isFallingStone())
-    && map[y + 1][x].isAir()) {
-    map[y + 1][x] = new FallingStone();
-    map[y][x] = new Air();
-  } else if ((map[y][x].isBox() || map[y][x].isFallingBox())
-    && map[y + 1][x].isAir()) {
-    map[y + 1][x] = new FallingBox();
-    map[y][x] = new Air();
-  } else if (map[y][x].isFallingStone()) {
-    map[y][x] = new Stone();
-  } else if (map[y][x].isFallingBox()) {
-    map[y][x] = new Box();
   }
 }
 
