@@ -31,6 +31,7 @@ interface Tile {
   colorTile(g: CanvasRenderingContext2D): void;
   moveVertical(dy: number): void;
   moveHorizontal(dx: number): void;
+  updateTile(y: number, x: number): void;
 }
 
 class Air implements Tile {
@@ -56,6 +57,8 @@ class Air implements Tile {
   moveHorizontal(dx: number): void {
     moveToTile(playerx + dx, playery);
   }
+
+  updateTile(y: number, x: number): void { }
 }
 
 class Flux implements Tile {
@@ -83,6 +86,8 @@ class Flux implements Tile {
   moveHorizontal(dx: number): void {
     moveToTile(playerx + dx, playery);
   }
+
+  updateTile(y: number, x: number): void { }
 }
 
 class Unbreakable implements Tile {
@@ -105,6 +110,7 @@ class Unbreakable implements Tile {
 
   moveVertical(dy: number): void { }
   moveHorizontal(dx: number): void { }
+  updateTile(y: number, x: number): void { }
 }
 
 class Player implements Tile {
@@ -124,6 +130,7 @@ class Player implements Tile {
   colorTile(g: CanvasRenderingContext2D): void { }
   moveVertical(dy: number): void { }
   moveHorizontal(dx: number): void { }
+  updateTile(y: number, x: number): void { }
 }
 
 class Stone implements Tile {
@@ -153,6 +160,13 @@ class Stone implements Tile {
       moveToTile(playerx + dx, playery);
     }
   }
+
+  updateTile(y: number, x: number): void {
+    if (map[y + 1][x].isAir()) {
+      map[y + 1][x] = new FallingStone();
+      map[y][x] = new Air();
+    }
+  }
 }
 
 class FallingStone implements Tile {
@@ -174,6 +188,10 @@ class FallingStone implements Tile {
   }
   moveVertical(dy: number): void { }
   moveHorizontal(dx: number): void { }
+
+  updateTile(y: number, x: number): void {
+    map[y][x] = new Stone();
+  }
 }
 
 class Box implements Tile {
@@ -203,6 +221,13 @@ class Box implements Tile {
       moveToTile(playerx + dx, playery);
     }
   }
+
+  updateTile(y: number, x: number): void {
+    if (map[y + 1][x].isAir()) {
+      map[y + 1][x] = new FallingBox();
+      map[y][x] = new Air();
+    }
+  }
 }
 
 class FallingBox implements Tile {
@@ -224,6 +249,10 @@ class FallingBox implements Tile {
   }
   moveVertical(dy: number): void { }
   moveHorizontal(dx: number): void { }
+
+  updateTile(y: number, x: number): void {
+    map[y][x] = new Box();
+  }
 }
 
 class Key1 implements Tile {
