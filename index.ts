@@ -245,12 +245,12 @@ class Key1 implements Tile {
   }
 
   moveVertical(dy: number): void {
-    removeLock1();
+    removeLock();
     moveToTile(playerx, playery + dy);
   }
 
   moveHorizontal(dx: number): void {
-    removeLock1();
+    removeLock();
     moveToTile(playerx + dx, playery);
   }
 }
@@ -274,12 +274,12 @@ class Key2 implements Tile {
   }
   
   moveVertical(dy: number): void {
-    removeLock2();
+    removeLock();
     moveToTile(playerx, playery + dy);
   }
 
   moveHorizontal(dx: number): void {
-    removeLock2();
+    removeLock();
     moveToTile(playerx + dx, playery);
   }
 }
@@ -467,23 +467,17 @@ function initTile() {
   }
 }
 
-function removeLock1() {
+function removeLock() {
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[y].length; x++) {
-      if (map[y][x].isLock1()) {
-        map[y][x] = new Air();
-      }
+      isLock(x, y);
     }
   }
 }
 
-function removeLock2() {
-  for (let y = 0; y < map.length; y++) {
-    for (let x = 0; x < map[y].length; x++) {
-      if (map[y][x].isLock2()) {
-        map[y][x] = new Air();
-      }
-    }
+function isLock(x: number, y: number) {
+  if (map[y][x].isLock1() || map[y][x].isLock2()) {
+    map[y][x] = new Air();
   }
 }
 
