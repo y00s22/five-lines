@@ -174,11 +174,7 @@ class FallingBox implements Tile {
   }
 }
 
-interface KeyStrategy {
-  colorTile(g: CanvasRenderingContext2D): void;
-}
-
-class Key implements Tile, KeyStrategy {
+class Key implements Tile {
   colorCode: string;
   constructor(colorCode: string) {
     this.colorCode = colorCode;
@@ -204,22 +200,12 @@ class Key implements Tile, KeyStrategy {
   updateTile(y: number, x: number): void { }
 }
 
-class Lock1 implements Tile {
-  isAir() { return false; }
-  isPlayer() { return false; }
-  isLock() {
-    return true;
+class LockTile implements Tile {
+  colorCode: string;
+  constructor(colorCode: string) {
+    this.colorCode = colorCode;
   }
-  
-  colorTile(g: CanvasRenderingContext2D): void {
-    g.fillStyle = "#ffcc00";
-  }
-  moveVertical(dy: number): void { }
-  moveHorizontal(dx: number): void { }
-  updateTile(y: number, x: number): void { }
-}
 
-class Lock2 implements Tile {
   isAir() { return false; }
   isPlayer() { return false; }
   isLock() {
@@ -227,8 +213,9 @@ class Lock2 implements Tile {
   }
   
   colorTile(g: CanvasRenderingContext2D): void {
-    g.fillStyle = "#00ccff";
+    g.fillStyle = this.colorCode;
   }
+
   moveVertical(dy: number): void { }
   moveHorizontal(dx: number): void { }
   updateTile(y: number, x: number): void { }
@@ -356,9 +343,9 @@ function convertTile(tile: RawTile) {
     case RawTile.BOX: return new Box();
     case RawTile.FALLING_BOX: return new FallingBox();
     case RawTile.KEY1: return new Key("#ffcc00");
-    case RawTile.LOCK1: return new Lock1();
+    case RawTile.LOCK1: return new LockTile("#ffcc00");
     case RawTile.KEY2: return new Key("#00ccff");
-    case RawTile.LOCK2: return new Lock2();
+    case RawTile.LOCK2: return new LockTile("#00ccff");
     default: throw new Error('This is wrong tile: ' + tile);
   }
 }
