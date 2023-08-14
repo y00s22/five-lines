@@ -16,17 +16,8 @@ enum RawTile {
 
 interface Tile {
   isAir(): boolean;
-  isFlux(): boolean;
-  isUnbreakable(): boolean;
   isPlayer(): boolean;
-  isStone(): boolean;
-  isFallingStone(): boolean;
-  isBox(): boolean;
-  isFallingBox(): boolean;
-  isKey1(): boolean;
-  isKey2(): boolean;
-  isLock1(): boolean;
-  isLock2(): boolean;
+  isLock(): boolean;
 
   colorTile(g: CanvasRenderingContext2D): void;
   moveVertical(dy: number): void;
@@ -36,17 +27,8 @@ interface Tile {
 
 class Air implements Tile {
   isAir() { return true; }
-  isFlux() { return false; }
-  isUnbreakable() { return false; }
   isPlayer() { return false; }
-  isStone() { return false; }
-  isFallingStone() { return false; }
-  isBox() { return false; }
-  isFallingBox() { return false; }
-  isKey1() { return false; }
-  isKey2() { return false; }
-  isLock1() { return false; }
-  isLock2() { return false; }
+  isLock() { return false; }
 
   colorTile(g: CanvasRenderingContext2D): void { }
 
@@ -63,17 +45,8 @@ class Air implements Tile {
 
 class Flux implements Tile {
   isAir() { return false; }
-  isFlux() { return true; }
-  isUnbreakable() { return false; }
   isPlayer() { return false; }
-  isStone() { return false; }
-  isFallingStone() { return false; }
-  isBox() { return false; }
-  isFallingBox() { return false; }
-  isKey1() { return false; }
-  isKey2() { return false; }
-  isLock1() { return false; }
-  isLock2() { return false; }
+  isLock() { return false; }
 
   colorTile(g: CanvasRenderingContext2D): void {
     g.fillStyle = "#ccffcc";
@@ -92,17 +65,8 @@ class Flux implements Tile {
 
 class Unbreakable implements Tile {
   isAir() { return false; }
-  isFlux() { return false; }
-  isUnbreakable() { return true; }
   isPlayer() { return false; }
-  isStone() { return false; }
-  isFallingStone() { return false; }
-  isBox() { return false; }
-  isFallingBox() { return false; }
-  isKey1() { return false; }
-  isKey2() { return false; }
-  isLock1() { return false; }
-  isLock2() { return false; }
+  isLock() { return false; }
 
   colorTile(g: CanvasRenderingContext2D): void {
     g.fillStyle = "#999999";
@@ -115,17 +79,8 @@ class Unbreakable implements Tile {
 
 class Player implements Tile {
   isAir() { return false; }
-  isFlux() { return false; }
-  isUnbreakable() { return false; }
   isPlayer() { return true; }
-  isStone() { return false; }
-  isFallingStone() { return false; }
-  isBox() { return false; }
-  isFallingBox() { return false; }
-  isKey1() { return false; }
-  isKey2() { return false; }
-  isLock1() { return false; }
-  isLock2() { return false; }
+  isLock() { return false; }
 
   colorTile(g: CanvasRenderingContext2D): void { }
   moveVertical(dy: number): void { }
@@ -135,17 +90,8 @@ class Player implements Tile {
 
 class Stone implements Tile {
   isAir() { return false; }
-  isFlux() { return false; }
-  isUnbreakable() { return false; }
   isPlayer() { return false; }
-  isStone() { return true; }
-  isFallingStone() { return false; }
-  isBox() { return false; }
-  isFallingBox() { return false; }
-  isKey1() { return false; }
-  isKey2() { return false; }
-  isLock1() { return false; }
-  isLock2() { return false; }
+  isLock() { return false; }
 
   colorTile(g: CanvasRenderingContext2D): void {
     g.fillStyle = "#0000cc";
@@ -171,17 +117,8 @@ class Stone implements Tile {
 
 class FallingStone implements Tile {
   isAir() { return false; }
-  isFlux() { return false; }
-  isUnbreakable() { return false; }
   isPlayer() { return false; }
-  isStone() { return false; }
-  isFallingStone() { return true; }
-  isBox() { return false; }
-  isFallingBox() { return false; }
-  isKey1() { return false; }
-  isKey2() { return false; }
-  isLock1() { return false; }
-  isLock2() { return false; }
+  isLock() { return false; }
 
   colorTile(g: CanvasRenderingContext2D): void {
     g.fillStyle = "#0000cc";
@@ -196,17 +133,8 @@ class FallingStone implements Tile {
 
 class Box implements Tile {
   isAir() { return false; }
-  isFlux() { return false; }
-  isUnbreakable() { return false; }
   isPlayer() { return false; }
-  isStone() { return false; }
-  isFallingStone() { return false; }
-  isBox() { return true; }
-  isFallingBox() { return false; }
-  isKey1() { return false; }
-  isKey2() { return false; }
-  isLock1() { return false; }
-  isLock2() { return false; }
+  isLock() { return false; }
   
   colorTile(g: CanvasRenderingContext2D): void {
     g.fillStyle = "#8b4513";
@@ -232,17 +160,8 @@ class Box implements Tile {
 
 class FallingBox implements Tile {
   isAir() { return false; }
-  isFlux() { return false; }
-  isUnbreakable() { return false; }
   isPlayer() { return false; }
-  isStone() { return false; }
-  isFallingStone() { return false; }
-  isBox() { return false; }
-  isFallingBox() { return true; }
-  isKey1() { return false; }
-  isKey2() { return false; }
-  isLock1() { return false; }
-  isLock2() { return false; }
+  isLock() { return false; }
   
   colorTile(g: CanvasRenderingContext2D): void {
     g.fillStyle = "#8b4513";
@@ -257,17 +176,8 @@ class FallingBox implements Tile {
 
 class Key1 implements Tile {
   isAir() { return false; }
-  isFlux() { return false; }
-  isUnbreakable() { return false; }
   isPlayer() { return false; }
-  isStone() { return false; }
-  isFallingStone() { return false; }
-  isBox() { return false; }
-  isFallingBox() { return false; }
-  isKey1() { return true; }
-  isKey2() { return false; }
-  isLock1() { return false; }
-  isLock2() { return false; }
+  isLock() { return false; }
   
   colorTile(g: CanvasRenderingContext2D): void {
     g.fillStyle = "#ffcc00";
@@ -287,17 +197,8 @@ class Key1 implements Tile {
 
 class Key2 implements Tile {
   isAir() { return false; }
-  isFlux() { return false; }
-  isUnbreakable() { return false; }
   isPlayer() { return false; }
-  isStone() { return false; }
-  isFallingStone() { return false; }
-  isBox() { return false; }
-  isFallingBox() { return false; }
-  isKey1() { return false; }
-  isKey2() { return true; }
-  isLock1() { return false; }
-  isLock2() { return false; }
+  isLock() { return false; }
   
   colorTile(g: CanvasRenderingContext2D): void {
     g.fillStyle = "#00ccff";
@@ -317,17 +218,10 @@ class Key2 implements Tile {
 
 class Lock1 implements Tile {
   isAir() { return false; }
-  isFlux() { return false; }
-  isUnbreakable() { return false; }
   isPlayer() { return false; }
-  isStone() { return false; }
-  isFallingStone() { return false; }
-  isBox() { return false; }
-  isFallingBox() { return false; }
-  isKey1() { return false; }
-  isKey2() { return false; }
-  isLock1() { return true; }
-  isLock2() { return false; }
+  isLock() {
+    return true;
+  }
   
   colorTile(g: CanvasRenderingContext2D): void {
     g.fillStyle = "#ffcc00";
@@ -339,17 +233,10 @@ class Lock1 implements Tile {
 
 class Lock2 implements Tile {
   isAir() { return false; }
-  isFlux() { return false; }
-  isUnbreakable() { return false; }
   isPlayer() { return false; }
-  isStone() { return false; }
-  isFallingStone() { return false; }
-  isBox() { return false; }
-  isFallingBox() { return false; }
-  isKey1() { return false; }
-  isKey2() { return false; }
-  isLock1() { return false; }
-  isLock2() { return true; }
+  isLock() {
+    return true;
+  }
   
   colorTile(g: CanvasRenderingContext2D): void {
     g.fillStyle = "#00ccff";
@@ -509,7 +396,7 @@ function removeLock() {
 }
 
 function isLock(x: number, y: number) {
-  if (map[y][x].isLock1() || map[y][x].isLock2()) {
+  if (map[y][x].isLock()) {
     map[y][x] = new Air();
   }
 }
