@@ -257,11 +257,21 @@ let map: Tile[][] = [
 
 let inputs: Input2[] = [];
 
-function remove(tile: Tile) {
+function removeLock1() {
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[y].length; x++) {
-      if (map[y][x] === tile) {
-        map[y][x] = Tile.AIR;
+      if (map[y][x].isLock1()) {
+        map[y][x] = new Air();
+      }
+    }
+  }
+}
+
+function removeLock2() {
+  for (let y = 0; y < map.length; y++) {
+    for (let x = 0; x < map[y].length; x++) {
+      if (map[y][x].isLock2()) {
+        map[y][x] = new Air();
       }
     }
   }
