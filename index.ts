@@ -57,6 +57,7 @@ interface Tile2 {
   isStony(): boolean;
   isBoxy(): boolean;
   isFalling(): boolean;
+  canFall(): boolean;
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void;
   moveHorizontal(dx: number): void;
@@ -91,6 +92,7 @@ class Air implements Tile2 {
   isStony(): boolean { return false; }
   isBoxy(): boolean { return false; }
   isFalling() { return false; }
+  canFall() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void { }
 
@@ -131,6 +133,7 @@ class Flux implements Tile2 {
   isStony(): boolean { return false; }
   isBoxy(): boolean { return false; }
   isFalling() { return false; }
+  canFall() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#ccffcc";
@@ -169,6 +172,7 @@ class Unbreakable implements Tile2 {
   isStony(): boolean { return false; }
   isBoxy(): boolean { return false; }
   isFalling() { return false; }
+  canFall() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#999999";
@@ -199,6 +203,7 @@ class Player implements Tile2 {
   isStony(): boolean { return false; }
   isBoxy(): boolean { return false; }
   isFalling() { return false; }
+  canFall() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void { }
   moveHorizontal(dx: number): void { }
@@ -229,6 +234,7 @@ class Stone implements Tile2 {
   isStony(): boolean { return true; }
   isBoxy(): boolean { return false; }
   isFalling() { return this.falling.isFalling(); }
+  canFall() { return true; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#0000cc";
@@ -266,6 +272,7 @@ class Box implements Tile2 {
   isStony(): boolean { return false; }
   isBoxy(): boolean { return true; }
   isFalling() { return this.falling.isFalling(); }
+  canFall() { return true; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#8b4513";
@@ -300,6 +307,7 @@ class Key1 implements Tile2 {
   isStony(): boolean { return false; }
   isBoxy(): boolean { return false; }
   isFalling() { return false; }
+  canFall() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#ffcc00";
@@ -338,6 +346,7 @@ class Key2 implements Tile2 {
   isStony(): boolean { return false; }
   isBoxy(): boolean { return false; }
   isFalling() { return false; }
+  canFall() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#00ccff";
@@ -377,6 +386,7 @@ class Lock1 implements Tile2 {
   isStony(): boolean { return false; }
   isBoxy(): boolean { return false; }
   isFalling() { return false; }
+  canFall() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#ffcc00";
@@ -409,6 +419,7 @@ class Lock2 implements Tile2 {
   isStony(): boolean { return false; }
   isBoxy(): boolean { return false; }
   isFalling() { return false; }
+  canFall() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#00ccff";
@@ -545,8 +556,7 @@ function updateMap() {
 }
 
 function updateTile(y: number, x: number) {
-  if ((map[y][x].isStony() || map[y][x].isBoxy())
-    && map[y + 1][x].isAir()) {
+  if (map[y][x].canFall() && map[y + 1][x].isAir()) {
     map[y][x].drop();
     map[y + 1][x] = map[y][x];
     map[y][x] = new Air();
