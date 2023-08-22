@@ -65,6 +65,7 @@ interface Tile2 {
 
   drop(): void;
   rest(): void;
+  update(x: number, y: number): void;
 }
 
 class Air implements Tile2 {
@@ -106,6 +107,7 @@ class Air implements Tile2 {
 
   drop(): void { }
   rest(): void { }
+  update(x: number, y: number): void { }
 }
 
 class Flux implements Tile2 {
@@ -149,6 +151,7 @@ class Flux implements Tile2 {
   }
   drop(): void { }
   rest(): void { }
+  update(x: number, y: number): void { }
 }
 
 class Unbreakable implements Tile2 {
@@ -182,6 +185,7 @@ class Unbreakable implements Tile2 {
   moveVertical(dy: number): void { }
   drop(): void { }
   rest(): void { }
+  update(x: number, y: number): void { }
 }
 
 class Player implements Tile2 {
@@ -210,6 +214,7 @@ class Player implements Tile2 {
   moveVertical(dy: number): void { }
   drop(): void { }
   rest(): void { }
+  update(x: number, y: number): void { }
 }
 
 class Stone implements Tile2 {
@@ -248,6 +253,15 @@ class Stone implements Tile2 {
   moveVertical(dy: number): void { }
   drop(): void { this.falling = new Falling(); }
   rest(): void { this.falling = new Resting(); }
+  update(x: number, y: number): void {
+    if (map[y + 1][x].isAir()) {
+      map[y][x].drop();
+      map[y + 1][x] = map[y][x];
+      map[y][x] = new Air();
+    } else if (map[y][x].isFalling()) {
+      map[y][x].rest();
+    }
+  }
 }
 
 class Box implements Tile2 {
@@ -285,6 +299,15 @@ class Box implements Tile2 {
   moveVertical(dy: number): void { }
   drop(): void { this.falling = new Falling(); }
   rest(): void { this.falling = new Resting(); }
+  update(x: number, y: number): void {
+    if (map[y + 1][x].isAir()) {
+      map[y][x].drop();
+      map[y + 1][x] = map[y][x];
+      map[y][x] = new Air();
+    } else if (map[y][x].isFalling()) {
+      map[y][x].rest();
+    }
+  }
 }
 
 class Key1 implements Tile2 {
@@ -324,6 +347,7 @@ class Key1 implements Tile2 {
   }
   drop(): void { }
   rest(): void { }
+  update(x: number, y: number): void { }
 }
 
 class Key2 implements Tile2 {
@@ -364,6 +388,7 @@ class Key2 implements Tile2 {
   }
   drop(): void { }
   rest(): void { }
+  update(x: number, y: number): void { }
 }
 
 class Lock1 implements Tile2 {
@@ -397,6 +422,7 @@ class Lock1 implements Tile2 {
   moveVertical(dy: number): void { }
   drop(): void { }
   rest(): void { }
+  update(x: number, y: number): void { }
 }
 
 class Lock2 implements Tile2 {
@@ -430,6 +456,7 @@ class Lock2 implements Tile2 {
   moveVertical(dy: number): void { }
   drop(): void { }
   rest(): void { }
+  update(x: number, y: number): void { }
 }
 
 interface Input2 {
@@ -550,18 +577,8 @@ function update() {
 function updateMap() {
   for (let y = map.length - 1; y >= 0; y--) {
     for (let x = 0; x < map[y].length; x++) {
-      updateTile(y, x);
+      map[y][x].update(x, y);
     }
-  }
-}
-
-function updateTile(y: number, x: number) {
-  if (map[y][x].canFall() && map[y + 1][x].isAir()) {
-    map[y][x].drop();
-    map[y + 1][x] = map[y][x];
-    map[y][x] = new Air();
-  } else if (map[y][x].isFalling()) {
-    map[y][x].rest();
   }
 }
 
