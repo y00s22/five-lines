@@ -365,7 +365,7 @@ class Map {
   private map: Tile[][];
   setMap(map: Tile[][]) { this.map = map; }
 
-  transform() {
+  constructor() {
     this.setMap(new Array(rawMap.length));
   
     for (let y = 0; y < rawMap.length; y++) {
@@ -475,10 +475,6 @@ function transformTile(tile: RawTile) {
   }
 }
 
-function transformMap() {
-  map.transform();
-}
-
 function update() {
   handleInputs();
   updateMap();
@@ -521,7 +517,6 @@ function gameLoop() {
 }
 
 window.onload = () => {
-  transformMap();
   gameLoop();
 }
 
