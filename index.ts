@@ -42,7 +42,6 @@ class FallStrategy {
   constructor(private falling: FallingState) { }
 
   update(tile: Tile2, x: number, y: number): void {
-    this.falling = map[y + 1][x].isAir() ? new Falling() : new Resting();
     
     this.drop(y, x, tile);
   }
@@ -52,6 +51,7 @@ class FallStrategy {
       map[y + 1][x] = tile;
       map[y][x] = new Air();
     }
+    this.falling = map[y + 1][x].getBlockOnTopState();
   }
 
   moveHorizontal(tile: Tile2, dx: number) {
@@ -84,6 +84,7 @@ interface Tile2 {
   moveHorizontal(dx: number): void;
   moveVertical(dy: number): void;
   update(x: number, y: number): void;
+  getBlockOnTopState(): FallingState;
 }
 
 class Air implements Tile2 {
@@ -101,6 +102,10 @@ class Air implements Tile2 {
     moveToTile(playerx, playery + dy);
   }
   update(x: number, y: number): void { }
+
+  getBlockOnTopState() {
+    return new Falling();
+  }
 }
 
 class Flux implements Tile2 {
@@ -121,6 +126,9 @@ class Flux implements Tile2 {
     moveToTile(playerx, playery + dy);
   }
   update(x: number, y: number): void { }
+  getBlockOnTopState() {
+    return new Resting();
+  }
 }
 
 class Unbreakable implements Tile2 {
@@ -135,6 +143,9 @@ class Unbreakable implements Tile2 {
   moveHorizontal(dx: number): void { }
   moveVertical(dy: number): void { }
   update(x: number, y: number): void { }
+  getBlockOnTopState() {
+    return new Resting();
+  }
 }
 
 class Player implements Tile2 {
@@ -146,6 +157,9 @@ class Player implements Tile2 {
   moveHorizontal(dx: number): void { }
   moveVertical(dy: number): void { }
   update(x: number, y: number): void { }
+  getBlockOnTopState() {
+    return new Resting();
+  }
 }
 
 class Stone implements Tile2 {
@@ -170,6 +184,9 @@ class Stone implements Tile2 {
   moveVertical(dy: number): void { }
   update(x: number, y: number): void {
     this.fallStrategy.update(this, x, y);
+  }
+  getBlockOnTopState() {
+    return new Resting();
   }
 }
 
@@ -196,6 +213,9 @@ class Box implements Tile2 {
   update(x: number, y: number): void {
     this.fallStrategy.update(this, x, y);
   }
+  getBlockOnTopState() {
+    return new Resting();
+  }
 }
 
 class Key implements Tile2 {
@@ -220,6 +240,9 @@ class Key implements Tile2 {
   }
 
   update(x: number, y: number): void { }
+  getBlockOnTopState() {
+    return new Resting();
+  }
 }
 
 class LockTile implements Tile2 {
@@ -236,6 +259,9 @@ class LockTile implements Tile2 {
   moveHorizontal(dx: number): void { }
   moveVertical(dy: number): void { }
   update(x: number, y: number): void { }
+  getBlockOnTopState() {
+    return new Resting();
+  }
 }
 
 class keyConfiguration {
