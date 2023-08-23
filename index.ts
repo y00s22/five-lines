@@ -17,15 +17,15 @@ enum RawTile {
 interface FallingState {
   isFalling(): boolean;
   isResting(): boolean;
-  moveHorizontal(tile: Tile2, dx: number): void;
-  drop(tile: Tile2, x: number, y: number): void;
+  moveHorizontal(tile: Tile, dx: number): void;
+  drop(tile: Tile, x: number, y: number): void;
 }
 
 class Falling implements FallingState {
   isFalling() { return true; }
   isResting() { return false; }
-  moveHorizontal(tile: Tile2, dx: number): void { }
-  drop(tile: Tile2, x: number, y: number): void {
+  moveHorizontal(tile: Tile, dx: number): void { }
+  drop(tile: Tile, x: number, y: number): void {
     map[y + 1][x] = tile;
     map[y][x] = new Air();
   }
@@ -34,46 +34,46 @@ class Falling implements FallingState {
 class Resting implements FallingState {
   isFalling() { return false; }
   isResting() { return true; }
-  moveHorizontal(tile: Tile2, dx: number): void {
+  moveHorizontal(tile: Tile, dx: number): void {
     if (map[playery][playerx + dx + dx].isAir()
       && !map[playery + 1][playerx + dx].isAir()) {
       map[playery][playerx + dx + dx] = tile;
       moveToTile(playerx + dx, playery);
     }
   }
-  drop(tile: Tile2, x: number, y: number): void { }
+  drop(tile: Tile, x: number, y: number): void { }
 }
 
 class FallStrategy {
   constructor(private falling: FallingState) { }
 
-  update(tile: Tile2, x: number, y: number): void {
+  update(tile: Tile, x: number, y: number): void {
     this.falling = map[y + 1][x].getBlockOnTopState();
     this.falling.drop(tile, x, y);
   }
 
-  moveHorizontal(tile: Tile2, dx: number) {
+  moveHorizontal(tile: Tile, dx: number) {
     this.falling.moveHorizontal(tile, dx);
   }
 }
 
 interface RemoveStrategy {
-  check(tile: Tile2): boolean;
+  check(tile: Tile): boolean;
 }
 
 class RemoveLock1 implements RemoveStrategy {
-  check(tile: Tile2) {
+  check(tile: Tile) {
     return tile.isLock1();
   }
 }
 
 class RemoveLock2 implements RemoveStrategy {
-  check(tile: Tile2) {
+  check(tile: Tile) {
     return tile.isLock2();
   }
 }
 
-interface Tile2 {
+interface Tile {
   isAir(): boolean;
   isLock1(): boolean;
   isLock2(): boolean;
@@ -85,7 +85,7 @@ interface Tile2 {
   getBlockOnTopState(): FallingState;
 }
 
-class Air implements Tile2 {
+class Air implements Tile {
   isAir() { return true; }
   isLock1() { return false; }
   isLock2() { return false; }
@@ -106,7 +106,7 @@ class Air implements Tile2 {
   }
 }
 
-class Flux implements Tile2 {
+class Flux implements Tile {
   isAir() { return false; }
   isLock1() { return false; }
   isLock2() { return false; }
@@ -129,7 +129,7 @@ class Flux implements Tile2 {
   }
 }
 
-class Unbreakable implements Tile2 {
+class Unbreakable implements Tile {
   isAir() { return false; }
   isLock1() { return false; }
   isLock2() { return false; }
@@ -146,7 +146,7 @@ class Unbreakable implements Tile2 {
   }
 }
 
-class Player implements Tile2 {
+class Player implements Tile {
   isAir() { return false; }
   isLock1() { return false; }
   isLock2() { return false; }
@@ -160,7 +160,7 @@ class Player implements Tile2 {
   }
 }
 
-class Stone implements Tile2 {
+class Stone implements Tile {
   private fallStrategy: FallStrategy;
   constructor(falling: FallingState) {
     this.fallStrategy = new FallStrategy(falling);
@@ -188,7 +188,7 @@ class Stone implements Tile2 {
   }
 }
 
-class Box implements Tile2 {
+class Box implements Tile {
   private fallStrategy: FallStrategy;
   constructor(falling: FallingState) {
     this.fallStrategy = new FallStrategy(falling);
@@ -216,7 +216,7 @@ class Box implements Tile2 {
   }
 }
 
-class Key implements Tile2 {
+class Key implements Tile {
   constructor(private keyConf: keyConfiguration) { }
 
   isAir() { return false; }
@@ -243,7 +243,7 @@ class Key implements Tile2 {
   }
 }
 
-class LockTile implements Tile2 {
+class LockTile implements Tile {
   constructor(private keyConf: keyConfiguration) { }
 
   isAir() { return false; }
@@ -327,7 +327,7 @@ let rawMap: RawTile[][] = [
   [2, 2, 2, 2, 2, 2, 2, 2],
 ];
 
-let map: Tile2[][];
+let map: Tile[][];
 function asssertExhausted(x: never): never {
   throw new Error("Unexpected objcet: " + x);
 }
