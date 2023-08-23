@@ -76,7 +76,6 @@ interface Tile2 {
   isAir(): boolean;
   isLock1(): boolean;
   isLock2(): boolean;
-  isFalling(): boolean;
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void;
   moveHorizontal(dx: number): void;
@@ -88,8 +87,6 @@ class Air implements Tile2 {
   isAir() { return true; }
   isLock1() { return false; }
   isLock2() { return false; }
-
-  isFalling() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void { }
 
@@ -107,8 +104,6 @@ class Flux implements Tile2 {
   isAir() { return false; }
   isLock1() { return false; }
   isLock2() { return false; }
-
-  isFalling() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#ccffcc";
@@ -129,7 +124,6 @@ class Unbreakable implements Tile2 {
   isAir() { return false; }
   isLock1() { return false; }
   isLock2() { return false; }
-  isFalling() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#999999";
@@ -144,7 +138,6 @@ class Player implements Tile2 {
   isAir() { return false; }
   isLock1() { return false; }
   isLock2() { return false; }
-  isFalling() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void { }
   moveHorizontal(dx: number): void { }
@@ -161,7 +154,6 @@ class Stone implements Tile2 {
   isAir() { return false; }
   isLock1() { return false; }
   isLock2() { return false; }
-  isFalling() { return this.fallStrategy.getFalling().isFalling(); }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#0000cc";
@@ -187,7 +179,6 @@ class Box implements Tile2 {
   isAir() { return false; }
   isLock1() { return false; }
   isLock2() { return false; }
-  isFalling() { return this.fallStrategy.getFalling().isFalling(); }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = "#8b4513";
@@ -210,7 +201,6 @@ class Key implements Tile2 {
   isAir() { return false; }
   isLock1() { return false; }
   isLock2() { return false; }
-  isFalling() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = this.keyConf.getColor();
@@ -236,7 +226,6 @@ class LockTile implements Tile2 {
   isAir() { return false; }
   isLock1() { return this.keyConf.is1(); }
   isLock2() { return !this.keyConf.is1(); }
-  isFalling() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
     g.fillStyle = this.keyConf.getColor();
