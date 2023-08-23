@@ -308,7 +308,7 @@ class keyConfiguration {
   }
 }
 
-interface Input2 {
+interface Input {
   isRight(): boolean;
   isLeft(): boolean;
   isUp(): boolean;
@@ -317,7 +317,7 @@ interface Input2 {
   handle(map: Map, player: Player): void;
 }
 
-class Right implements Input2 {
+class Right implements Input {
   isRight() { return true; }
   isLeft() { return false; }
   isUp() { return false; }
@@ -328,7 +328,7 @@ class Right implements Input2 {
   }
 }
 
-class Left implements Input2 {
+class Left implements Input {
   isRight() { return false; }
   isLeft() { return true; }
   isUp() { return false; }
@@ -339,7 +339,7 @@ class Left implements Input2 {
   }
 }
 
-class Up implements Input2 {
+class Up implements Input {
   isRight() { return false; }
   isLeft() { return false; }
   isUp() { return true; }
@@ -350,7 +350,7 @@ class Up implements Input2 {
   }
 }
 
-class Down implements Input2 {
+class Down implements Input {
   isRight() { return false; }
   isLeft() { return false; }
   isUp() { return false; }
@@ -413,7 +413,7 @@ class Map {
   isAir(x: number, y: number): boolean {
     return this.map[x][y].isAir();
   }
-  
+
   pushHorizontal(palyer: Player, x: number, y: number, dx: number, tile: Tile) {
     if (this.isAir(x + dx + dx, y)
       && !this.isAir(x + dx, y + 1)) {
@@ -451,7 +451,7 @@ function asssertExhausted(x: never): never {
   throw new Error("Unexpected objcet: " + x);
 }
 
-let inputs: Input2[] = [];
+let inputs: Input[] = [];
 let player = new Player();
 let map = new Map();
 
