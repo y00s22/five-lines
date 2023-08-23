@@ -40,7 +40,6 @@ class Resting implements FallingState {
 
 class FallStrategy {
   constructor(private falling: FallingState) { }
-  getFalling() { return this.falling; }
 
   update(tile: Tile2, x: number, y: number): void {
     this.falling = map[y + 1][x].isAir() ? new Falling() : new Resting();
@@ -53,6 +52,10 @@ class FallStrategy {
       map[y + 1][x] = tile;
       map[y][x] = new Air();
     }
+  }
+
+  moveHorizontal(tile: Tile2, dx: number) {
+    this.falling.moveHorizontal(tile, dx);
   }
 }
 
@@ -161,7 +164,7 @@ class Stone implements Tile2 {
   }
 
   moveHorizontal(dx: number): void {
-    this.fallStrategy.getFalling().moveHorizontal(this, dx);
+    this.fallStrategy.moveHorizontal(this, dx);
   }
 
   moveVertical(dy: number): void { }
@@ -186,7 +189,7 @@ class Box implements Tile2 {
   }
 
   moveHorizontal(dx: number): void {
-    this.fallStrategy.getFalling().moveHorizontal(this, dx);
+    this.fallStrategy.moveHorizontal(this, dx);
   }
 
   moveVertical(dy: number): void { }
@@ -203,17 +206,16 @@ class Key implements Tile2 {
   isLock2() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
-    g.fillStyle = this.keyConf.getColor();
-    g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    this.keyConf.setColor(g, x, y);
   }
 
   moveHorizontal(dx: number): void {
-    remove(this.keyConf.getRemoveStrategy());
+    this.keyConf.removeLock();
     moveToTile(playerx + dx, playery);
   }
 
   moveVertical(dy: number): void {
-    remove(this.keyConf.getRemoveStrategy());
+    this.keyConf.removeLock();
     moveToTile(playerx, playery + dy);
   }
 
@@ -228,8 +230,7 @@ class LockTile implements Tile2 {
   isLock2() { return !this.keyConf.is1(); }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
-    g.fillStyle = this.keyConf.getColor();
-    g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    this.keyConf.setColor(g, x, y);
   }
 
   moveHorizontal(dx: number): void { }
@@ -244,9 +245,16 @@ class keyConfiguration {
     private removeStrategy: RemoveStrategy
   ) { }
 
-  getColor() { return this.color; }
+  setColor(g: CanvasRenderingContext2D, x: number, y: number) {
+    g.fillStyle = this.color;
+    g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+  }
+
   is1() { return this._1; }
-  getRemoveStrategy() { return this.removeStrategy; }
+
+  removeLock() {
+    remove(this.removeStrategy);
+  }
 }
 
 interface Input2 {
