@@ -200,11 +200,12 @@ class Key1 implements Tile2 {
   }
 
   moveHorizontal(dx: number): void {
-    removeLock1();
+    remove(new RemoveLock1());
     moveToTile(playerx + dx, playery);
   }
+
   moveVertical(dy: number): void {
-    removeLock1();
+    remove(new RemoveLock1());
     moveToTile(playerx, playery + dy);
   }
   update(x: number, y: number): void { }
@@ -222,12 +223,12 @@ class Key2 implements Tile2 {
   }
 
   moveHorizontal(dx: number): void {
-    removeLock2();
+    remove(new RemoveLock2());
     moveToTile(playerx + dx, playery);
   }
 
   moveVertical(dy: number): void {
-    removeLock2();
+    remove(new RemoveLock2());
     moveToTile(playerx, playery + dy);
   }
   update(x: number, y: number): void { }
@@ -348,20 +349,26 @@ function transformMap() {
 
 let inputs: Input2[] = [];
 
-function removeLock1() {
-  for (let y = 0; y < map.length; y++) {
-    for (let x = 0; x < map[y].length; x++) {
-      if (map[y][x].isLock1()) {
-        map[y][x] = new Air();
-      }
-    }
+interface RemoveStrategy {
+  check(tile: Tile2): boolean;
+}
+
+class RemoveLock1 implements RemoveStrategy {
+  check(tile: Tile2) {
+    return tile.isLock1();
   }
 }
 
-function removeLock2() {
+class RemoveLock2 implements RemoveStrategy {
+  check(tile: Tile2) {
+    return tile.isLock2();
+  }
+}
+
+function remove(shouldRemove: RemoveStrategy) {
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[y].length; x++) {
-      if (map[y][x].isLock2()) {
+      if (shouldRemove.check(map[y][x])) {
         map[y][x] = new Air();
       }
     }
