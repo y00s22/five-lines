@@ -188,49 +188,30 @@ class Box implements Tile2 {
   }
 }
 
-class Key1 implements Tile2 {
+class Key implements Tile2 {
+  constructor(private color: string,
+     private removeStrategy: RemoveStrategy) { }
+
   isAir() { return false; }
   isLock1() { return false; }
   isLock2() { return false; }
   isFalling() { return false; }
 
   draw(g: CanvasRenderingContext2D, x: number, y: number): void {
-    g.fillStyle = "#ffcc00";
+    g.fillStyle = this.color;
     g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
   }
 
   moveHorizontal(dx: number): void {
-    remove(new RemoveLock1());
+    remove(this.removeStrategy);
     moveToTile(playerx + dx, playery);
   }
 
   moveVertical(dy: number): void {
-    remove(new RemoveLock1());
+    remove(this.removeStrategy);
     moveToTile(playerx, playery + dy);
   }
-  update(x: number, y: number): void { }
-}
-
-class Key2 implements Tile2 {
-  isAir() { return false; }
-  isLock1() { return false; }
-  isLock2() { return false; }
-  isFalling() { return false; }
-
-  draw(g: CanvasRenderingContext2D, x: number, y: number): void {
-    g.fillStyle = "#00ccff";
-    g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-  }
-
-  moveHorizontal(dx: number): void {
-    remove(new RemoveLock2());
-    moveToTile(playerx + dx, playery);
-  }
-
-  moveVertical(dy: number): void {
-    remove(new RemoveLock2());
-    moveToTile(playerx, playery + dy);
-  }
+  
   update(x: number, y: number): void { }
 }
 
@@ -327,9 +308,9 @@ function transformTile(tile: RawTile) {
     case RawTile.FALLING_STONE: return new Stone(new Falling());
     case RawTile.BOX: return new Box(new Resting()); 
     case RawTile.FALLING_BOX: return new Box(new Falling());
-    case RawTile.KEY1: return new Key1(); 
+    case RawTile.KEY1: return new Key("#ffcc00", new RemoveLock1()); 
     case RawTile.LOCK1: return new Lock1();
-    case RawTile.KEY2: return new Key2(); 
+    case RawTile.KEY2: return new Key("#00ccff", new RemoveLock2()); 
     case RawTile.LOCK2: return new Lock2();
     default: asssertExhausted(tile);
   }
