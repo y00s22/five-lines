@@ -3,17 +3,6 @@ const TILE_SIZE = 30;
 const FPS = 30;
 const SLEEP = 1000 / FPS;
 
-enum RawTile {
-  AIR,
-  FLUX,
-  UNBREAKABLE,
-  PLAYER,
-  STONE, FALLING_STONE,
-  BOX, FALLING_BOX,
-  KEY1, LOCK1,
-  KEY2, LOCK2
-}
-
 interface RawTileValue {
   trasform(): Tile;
 }
@@ -90,19 +79,19 @@ class Lock2Value implements RawTileValue {
   }
 }
 
-class RawTile2 {
-  static readonly AIR = new RawTile2(new AirValue());
-  static readonly FLUX = new RawTile2(new FluxValue());
-  static readonly UNBREAKABLE = new RawTile2(new UnbreakableValue());
-  static readonly PLAYER = new RawTile2(new PlayerValue());
-  static readonly STONE = new RawTile2(new StoneValue());
-  static readonly FALLING_STONE = new RawTile2(new FallingStoneValue());
-  static readonly BOX = new RawTile2(new BoxValue());
-  static readonly FALLING_BOX = new RawTile2(new FallingBoxValue());
-  static readonly KEY1 = new RawTile2(new Key1Value());
-  static readonly LOCK1 = new RawTile2(new Key2Value());
-  static readonly KEY2 = new RawTile2(new Lock1Value());
-  static readonly LOCK2 = new RawTile2(new Lock2Value());
+class RawTile {
+  static readonly AIR = new RawTile(new AirValue());
+  static readonly FLUX = new RawTile(new FluxValue());
+  static readonly UNBREAKABLE = new RawTile(new UnbreakableValue());
+  static readonly PLAYER = new RawTile(new PlayerValue());
+  static readonly STONE = new RawTile(new StoneValue());
+  static readonly FALLING_STONE = new RawTile(new FallingStoneValue());
+  static readonly BOX = new RawTile(new BoxValue());
+  static readonly FALLING_BOX = new RawTile(new FallingBoxValue());
+  static readonly KEY1 = new RawTile(new Key1Value());
+  static readonly LOCK1 = new RawTile(new Key2Value());
+  static readonly KEY2 = new RawTile(new Lock1Value());
+  static readonly LOCK2 = new RawTile(new Lock2Value());
   
   private constructor(private value: RawTileValue) { }
 
@@ -112,18 +101,18 @@ class RawTile2 {
 }
 
 const RAW_TILES = [
-  RawTile2.AIR,
-  RawTile2.FLUX,
-  RawTile2.UNBREAKABLE,
-  RawTile2.PLAYER,
-  RawTile2.STONE,
-  RawTile2.FALLING_STONE,
-  RawTile2.BOX,
-  RawTile2.FALLING_BOX,
-  RawTile2.KEY1,
-  RawTile2.LOCK1,
-  RawTile2.KEY2,
-  RawTile2.LOCK2
+  RawTile.AIR,
+  RawTile.FLUX,
+  RawTile.UNBREAKABLE,
+  RawTile.PLAYER,
+  RawTile.STONE,
+  RawTile.FALLING_STONE,
+  RawTile.BOX,
+  RawTile.FALLING_BOX,
+  RawTile.KEY1,
+  RawTile.LOCK1,
+  RawTile.KEY2,
+  RawTile.LOCK2
 ];
 
 class Player {
